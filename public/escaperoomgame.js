@@ -75,11 +75,15 @@ let soundGameOverScene;
 let soundInfoBeforeRoom3;
 let soundLastRoom;
 
+let soundOnSwitch = false;
+let sceneSound = "NoSound";
+let currentSound = null;
+
 function preload() {
     soundMainScene = loadSound('./sounds_escaperoomgame/fearverb-21486.mp3');
     soundIntroScene = loadSound('./sounds_escaperoomgame/nycdiner.mp3');
     soundPrologueScene = loadSound('./sounds_escaperoomgame/dark3.mp3');
-    soundRoom1Scene = loadSound('./sounds_escaperoomgame/aloneineroom.mp3');
+    soundRoom1Scene = loadSound('./sounds_escaperoomgame/aloneinroom.mp3');
     soundPasswordScene = loadSound('./sounds_escaperoomgame/scaryhorror.mp3');
     soundRoom2Scene = loadSound('./sounds_escaperoomgame/scaryforest.mp3');
     soundPassword2Scene = loadSound('./sounds_escaperoomgame/creepycrime.mp3');
@@ -94,7 +98,8 @@ function setup() {
 
     frameRate(24);
     createCanvas(1200, 800);
-    outputVolume(0.05);
+    
+
 
     //main:
     saveB = loadImage("./images_escaperoomgame/main/saveB.png");
@@ -152,6 +157,128 @@ function setup() {
 
 }
 
+function draw() {
+    background(0);
+
+    if (soundOnSwitch == true && scene != sceneSound) {
+        playSoundByScene(scene);
+    }
+
+
+    if (scene == "MainScene") {
+        drawMainScene();
+    } else if (scene == "IntroScene") {
+        drawIntroScene();
+    } else if (scene == "PrologueScene") {
+        drawPrologueScene();
+    } else if (scene == "Room1Scene") { 
+        drawRoom1Scene();
+    } else if (scene == "PasswordScene") {
+        drawPasswordScene();
+    } else if (scene == "Room2Scene") {
+        drawRoom2Scene();
+    } else if (scene == "Password2Scene") {
+        drawPassword2Scene();
+    } else if (scene == "Password3Scene") {
+        drawPassword3Scene();
+    } else if (scene == "FinalResultScene") {
+        drawFinalResultScene();
+    } else if (scene == "GameOverScene") {
+        drawGameOverScene();
+    } else if (scene == "InfoBeforeRoom3") {
+        drawInfoBeforeRoom3();
+    } else if (scene == "LastRoom") {
+        drawLastRoom();
+    }
+        
+    if (frameCountInitial != 0) {
+        transparency = 0;
+        if (frameCount <= frameCountInitial + 5) {
+            transparency = 255;
+        } else if (frameCount > frameCountInitial + 5) {
+            transparency = lerp(255, 0, 
+                (frameCount - frameCountInitial - 5).toFixed(4)/(15).toFixed(4));
+        }
+        saveButtonClicked(transparency)
+    }
+        
+    if (frameCountFinal == frameCount) {
+        frameCountInitial = 0;
+        frameCountFinal = 0;
+    }
+
+}
+
+
+function playSoundByScene(scene) {
+
+    sceneSound = scene;
+    
+    if (currentSound != null) {
+        currentSound.stop();
+    }
+
+    //sound:
+    //volumeSystem = new p5.Amplitude();
+    //soundMainScene.play();
+    //volumeSystem.setInput(soundMainScene);
+
+    if (scene == "MainScene") {
+        currentSound = soundMainScene;
+        outputVolume(0.15);
+    } else if (scene == "IntroScene") {
+        currentSound = soundIntroScene;
+        outputVolume(0.5);
+    } else if (scene == "PrologueScene") {
+        currentSound = soundPrologueScene;
+        outputVolume(0.15);
+    } else if (scene == "Room1Scene") { 
+        currentSound = soundRoom1Scene;
+        outputVolume(0.25);
+    } else if (scene == "PasswordScene") {
+        currentSound = soundPasswordScene;
+        outputVolume(0.15);
+    } else if (scene == "Room2Scene") {
+        currentSound = soundRoom2Scene;
+        outputVolume(0.15);
+    } else if (scene == "Password2Scene") {
+        currentSound = soundPassword2Scene;
+        outputVolume(0.15);
+    } else if (scene == "Password3Scene") {
+        currentSound = soundPassword3Scene;
+        outputVolume(0.2);
+    } else if (scene == "FinalResultScene") {
+        currentSound = soundFinalResultScene;
+        outputVolume(0.3);
+    } else if (scene == "GameOverScene") {
+        currentSound = soundGameOverScene;
+        outputVolume(0.1);
+    } else if (scene == "InfoBeforeRoom3") {
+        currentSound = soundInfoBeforeRoom3;
+        outputVolume(0.2);
+    } else if (scene == "LastRoom") {
+        currentSound = soundLastRoom;
+        outputVolume(0.2);
+    }
+
+    
+    currentSound.play();
+    
+}
+
+
+function resetAllStates() {
+
+    //scene = "MainScene";
+    passwordSceneState = "EMPTY";
+    passwordSceneStateForGameover = 0;
+    passwordScene2StateForGameover = 0;
+    passwordScene2State = "DEFAULT";
+    passwordScene3StateForPlayer = "";
+    passwordScene3StateForComputer = "";
+    passwordScene3GameResult = "";
+}
+
 function calculateLineEquation(x1, y1, x2, y2) {
     slope = (y2 - y1).toFixed(4) / (x2 - x1).toFixed(4);
     intercept = y1 - ((y2 - y1).toFixed(4) / (x2 - x1).toFixed(4)) * x1;
@@ -190,52 +317,7 @@ function detectAreaWithCoordinates(x1, y1, x2, y2, x3, y3, x4, y4, a, b) {
     return condition1 && condition2 && condition3 && condition4;
 }
     
-function draw() {
-    background(0);
 
-    if (scene == "MainScene") {
-        drawMainScene();
-    } else if (scene == "IntroScene") {
-        drawIntroScene();
-    } else if (scene == "PrologueScene") {
-        drawPrologueScene();
-    } else if (scene == "Room1Scene") { 
-        drawRoom1Scene();
-    } else if (scene == "PasswordScene") {
-        drawPasswordScene();
-    } else if (scene == "Room2Scene") {
-        drawRoom2Scene();
-    } else if (scene == "Password2Scene") {
-        drawPassword2Scene();
-    } else if (scene == "Password3Scene") {
-        drawPassword3Scene();
-    } else if (scene == "FinalResultScene") {
-        drawFinalResultScene();
-    } else if (scene == "GameOverScene") {
-        drawGameOverScene();
-    } else if (scene == "InfoBeforeRoom3") {
-        drawInfoBeforeRoom3();
-    } else if (scene == "LastRoom") {
-        drawLastRoom();
-    }
-        
-    if (frameCountInitial != 0) {
-        transparency = 0;
-        if (frameCount <= frameCountInitial + 5) {
-            transparency = 255;
-        } else if (frameCount > frameCountInitial + 5) {
-            transparency = lerp(255, 0, 
-                (frameCount - frameCountInitial - 5).toFixed(4)/(15).toFixed(4));
-        }
-        // saveButtonClicked(transparency)
-    }
-        
-    if (frameCountFinal == frameCount) {
-        frameCountInitial = 0;
-        frameCountFinal = 0;
-    }
-
-}
 
 function drawMainScene() {
     image(main_img, 0, 0, 1200, 800);
@@ -259,10 +341,10 @@ function drawPrologueScene() {
 
 function mouseClicked() {
     
-    volumeSystem = new p5.Amplitude();
-    soundMainScene.play();
-    volumeSystem.setInput(soundMainScene);
-    console.log("Clicked!");
+    if (soundOnSwitch == false) {
+        soundOnSwitch = true;
+    } // Enable sound by getting a click from the user
+
     
     let mX = mouseX;
     let mY = mouseY;
@@ -272,7 +354,7 @@ function mouseClicked() {
             scene = "IntroScene";
         }
         if (450 < mX && mX < 750 && 500 < mY && mY < 600) {
-            // loadDataFromFile()
+            loadDataFromFile()
         }
         if (450 < mX && mX < 750 && 650 < mY && mY < 750) {
             location.reload();
@@ -343,45 +425,52 @@ function mouseClicked() {
     if (detectAreaWithCoordinates(1140, 740, 1190, 739, 1191, 789, 1141, 790,  mouseX, mouseY)) {
         frameCountInitial = frameCount;
         frameCountFinal = frameCountInitial + 20;
-        // saveDataToFile();
+        saveDataToFile();
     }
 }
 
 
+
 function saveDataToFile() {
-    // saveData = [base64.encodestring(str(gameData.scene).encode('utf-8')).rstrip('\n'), 
-    //     base64.encodestring(str(gameData.passwordSceneState.encode('utf-8'))).rstrip('\n'),
-    //     base64.encodestring(str(gameData.passwordSceneStateForGameover).encode('utf-8')).rstrip('\n'),
-    //     base64.encodestring(str(gameData.passwordScene2StateForGameover).encode('utf-8')).rstrip('\n'),
-    //     base64.encodestring(str(gameData.passwordScene2State).encode('utf-8')).rstrip('\n'),
-    //     base64.encodestring(str(gameData.passwordScene3StateForPlayer).encode('utf-8').rstrip('\n')),
-    //     base64.encodestring(str(gameData.passwordScene3StateForComputer).encode('utf-8')).rstrip('\n'),
-    //     base64.encodestring(str(gameData.passwordScene3GameResult).encode('utf-8')).rstrip('\n')
-    //     ]
-    // saveStrings("saveData.txt", saveData)
+
+    localStorage.setItem('scene', btoa(scene));
+    localStorage.setItem('passwordSceneState', btoa(passwordSceneState));
+    localStorage.setItem('passwordSceneStateForGameover', btoa(passwordSceneStateForGameover));
+    localStorage.setItem('passwordScene2StateForGameover', btoa(passwordScene2StateForGameover));
+    localStorage.setItem('passwordScene2State', btoa(passwordScene2State));
+    localStorage.setItem('passwordScene3StateForPlayer', btoa(passwordScene3StateForPlayer));
+    localStorage.setItem('passwordScene3StateForComputer', btoa(passwordScene3StateForComputer));
+    localStorage.setItem('passwordScene3GameResult', btoa(passwordScene3GameResult));
+    localStorage.setItem('soundOnSwitch', btoa(soundOnSwitch));
+    localStorage.setItem('sceneSound', btoa(sceneSound));
+    localStorage.setItem('currentSound', btoa(currentSound));
+
 
 }
 
 function loadDataFromFile() {
-    // savedData = loadStrings("saveData.txt")
-    // gameData.scene = base64.decodestring(savedData[0])
-    // gameData.passwordSceneState = base64.decodestring(savedData[1])
-    // gameData.passwordSceneStateForGameover = int(base64.decodestring(savedData[2]))
-    // gameData.passwordScene2StateForGameover = int(base64.decodestring(savedData[3]))
-    // gameData.passwordScene2State = base64.decodestring(savedData[4])
-    // gameData.passwordScene3StateForPlayer = base64.decodestring(savedData[5])
-    // gameData.passwordScene3StateForComputer = base64.decodestring(savedData[6])
-    // gameData.passwordScene3GameResult = base64.decodestring(savedData[7])
+
+    scene = atob(localStorage.getItem('scene'));
+    passwordSceneState = atob(localStorage.getItem('passwordSceneState'));
+    passwordSceneStateForGameover = atob(localStorage.getItem('passwordSceneStateForGameover'));
+    passwordScene2StateForGameover = atob(localStorage.getItem('passwordScene2StateForGameover'));
+    passwordScene2State = atob(localStorage.getItem('passwordScene2State'));
+    passwordScene3StateForPlayer = atob(localStorage.getItem('passwordScene3StateForPlayer'));
+    passwordScene3StateForComputer = atob(localStorage.getItem('passwordScene3StateForComputer'));
+    passwordScene3GameResult = atob(localStorage.getItem('passwordScene3GameResult'));
+    soundOnSwitch = atob(localStorage.getItem('soundOnSwitch'));
+    sceneSound = atob(localStorage.getItem('sceneSound'));
+    currentSound = atob(localStorage.getItem('currentSound'));
+
 }
    
 function saveButtonClicked(transparency) {
-    // textSize(200)
-    // textAlign(CENTER, CENTER)
-    // textFont(rockSaltFont)
-    // fill(255, 8, 8, transparency)
-    // text("SAVED", 600, 400)
-    // print(gameData.frameCountInitial)
-    // print(gameData.frameCountFinal)
+    textSize(200);
+    textAlign(CENTER, CENTER);
+    textFont(rockSaltFont);
+    fill(255, 8, 8, transparency);
+    text("SAVED", 600, 400);
+
 }
 
 function drawRoom1Scene() {
@@ -454,6 +543,7 @@ function keyPressed() {
 
 function drawGameOverScene() {
     image(game_over, 0, 0, 1200, 800);
+    resetAllStates();
 }
 
 function drawPasswordScene() {
@@ -495,9 +585,7 @@ function drawRoom2Scene() {
     else if (detectAreaWithCoordinates(400, 471, 623, 605, 618, 624, 394, 591, mouseX, mouseY)) {
         image(letter2, 0, 0, 1200, 800);
     }
-    // else if (detectAreaWithCoordinates(950, 372, 971, 373, 972, 409, 951, 414, mouseX, mouseY)) {
-    //     image(default, width/2 - 400, height/2 - 300, 800, 600)    
-    //}   
+    
     image(saveB, 1140, 740, 50, 50);
 }
 
@@ -636,6 +724,7 @@ function emptyString() {
 
 function drawLastRoom() {
      image(last_door, 0, 0, 1200, 800);
+     resetAllStates();
 }
 
 
