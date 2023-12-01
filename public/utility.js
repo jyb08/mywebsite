@@ -8,12 +8,14 @@ let injectNavBar = () => {
                         <a class="uk-navbar-item uk-logo" href="./chat.html">Chat</a>
 
                         <a class="uk-navbar-item uk-logo" href="./index.html">
-                            <img src="../images/pngegg (18).png" alt="logo" width="100" height="100">
+                        Logo
                         </a>
 
                         <a class="uk-navbar-item uk-logo" href="./activities.html">Activities</a>
                             
                         <a class="uk-navbar-item uk-logo" href="./escaperoomgame.html">Escape Room</a>
+
+                        <a class="uk-navbar-item uk-logo" href="./becomethekinggame.html">Become the King</a>
                 
                     </div>
                 </nav>
