@@ -25,7 +25,314 @@ class Room {
         this.items = [];
                
     }
+
+
+    removeItemFromRoom(itemName) {
+
+        let found = -1;
+
+        for (let i = 0; i < this.items.length; i++) {
+            let currentItem = this.items[i];
+            if (currentItem.name.includes(itemName)) {
+                found = i;
+                break;
+            }
+        }
     
+        if (found != -1) {
+            this.items.splice(found, 1);
+            return true;
+        } else {
+            displayMessage("The following item does not exist in this room!");
+            return false;
+        }
+    }
+
+    checkItemFromRoom(itemName) {
+
+        let found = -1;
+
+        for (let i = 0; i < this.items.length; i++) {
+            let currentItem = this.items[i];
+            if (currentItem.name.includes(itemName)) {
+                found = i;
+                break;
+            }
+        }
+    
+        if (found != -1) {
+            return true;
+        } else {
+            displayMessage("The following item does not exist in this room!");
+            return false;
+        }
+
+
+    }
+
+    // Assuming there MUST be an item in the room.
+    getItemFromRoom(itemName) {
+
+        if (itemName == "apple") {
+            let inventoryLocation = findItemSpotFor1x1(); 
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] = true;
+
+                let currentApple = JSON.parse(JSON.stringify(apple_0));
+                currentApple.inventoryLocationIJ = [i, j];
+                
+                gameData.items.push(currentApple);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("apple");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+        else if (itemName == "chicken") {
+            let inventoryLocation = findItemSpotFor2x1();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] = true;
+                gameData.inventory[i][j + 1] = true;
+
+                let currentChicken = JSON.parse(JSON.stringify(chicken_1));
+                currentChicken.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentChicken);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("chicken");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+        
+        else if (itemName == "medicine") {
+            let inventoryLocation = findItemSpotFor1x1();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] = true;
+
+                let currentMedicine = JSON.parse(JSON.stringify(medicine_2));
+                currentMedicine.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentMedicine);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("medicine");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+        else if (itemName == "short sword") {
+            let inventoryLocation = findItemSpotFor1x3();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] = true;
+                gameData.inventory[i + 1][j] == true;
+                gameData.inventory[i + 2][j] == true;
+
+                let currentShortSword = JSON.parse(JSON.stringify(short_sword_3));
+                currentShortSword.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentShortSword);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("short sword");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+        else if (itemName == "long sword") {
+            let inventoryLocation = findItemSpotFor1x4();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] = true;
+                gameData.inventory[i + 1][j] == true;
+                gameData.inventory[i + 2][j] == true;
+                gameData.inventory[i + 3][j] == true;
+
+                let currentLongSword = JSON.parse(JSON.stringify(long_sword_4));
+                currentLongSword.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentLongSword);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("long sword");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+        
+        else if (itemName == "broadsword") {
+            let inventoryLocation = findItemSpotFor1x4();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] = true;
+                gameData.inventory[i + 1][j] == true;
+                gameData.inventory[i + 2][j] == true;
+                gameData.inventory[i + 3][j] == true;
+
+                let currentBroadsword = JSON.parse(JSON.stringify(broadsword_5));
+                currentBroadsword.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentBroadsword);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("broadsword");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+
+        
+        else if (itemName == "leather armor") {
+            let inventoryLocation = findItemSpotFor2x2();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] == true;
+                gameData.inventory[i][j + 1] == true;
+                gameData.inventory[i + 1][j] == true;
+                gameData.inventory[i + 1][j + 1] == true;
+
+                let currentLeatherArmor = JSON.parse(JSON.stringify(leather_armor_6));
+                currentLeatherArmor.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentLeatherArmor);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("leather armor");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+        else if (itemName == "chain armor") {
+            let inventoryLocation = findItemSpotFor2x3();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] == true;
+                gameData.inventory[i][j + 1] == true;
+                gameData.inventory[i + 1][j] == true;
+                gameData.inventory[i + 1][j + 1] == true;
+                gameData.inventory[i + 2][j] == true;
+                gameData.inventory[i + 2][j + 1] == true;
+
+                let currentChainArmor = JSON.parse(JSON.stringify(chain_armor_7));
+                currentChainArmor.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentChainArmor);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("chain armor");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+        else if (itemName == "plate armor") {
+            let inventoryLocation = findItemSpotFor2x4();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] == true;
+                gameData.inventory[i][j + 1] == true;
+                gameData.inventory[i + 1][j] == true;
+                gameData.inventory[i + 1][j + 1] == true;
+                gameData.inventory[i + 2][j] == true;
+                gameData.inventory[i + 2][j + 1] == true;
+                gameData.inventory[i + 3][j] == true;
+                gameData.inventory[i + 3][j + 1] == true;
+
+                let currentPlateArmor = JSON.parse(JSON.stringify(plate_armor_8));
+                currentPlateArmor.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentPlateArmor);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("plate armor");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+        else if (itemName == "dragon sword") {
+            let inventoryLocation = findItemSpotFor1x4();
+            if (inventoryLocation[0] != -1) {
+
+                let i = inventoryLocation[0];
+                let j = inventoryLocation[1];
+
+                // 
+                gameData.inventory[i][j] == true;
+                gameData.inventory[i + 1][j] == true;
+                gameData.inventory[i + 2][j] == true;
+                gameData.inventory[i + 3][j] == true;
+
+                let currentDragonSword = JSON.parse(JSON.stringify(dragon_sword_9));
+                currentDragonSword.inventoryLocationIJ = [i, j];
+                
+                
+                gameData.items.push(currentDragonSword);
+
+                rooms[gameData.currentRoomId].removeItemFromRoom("dragon sword");
+                
+            } else {
+                displayMessage("No room in inventory!");
+            }
+        }
+
+    }
+
 }
 
 let place_0 = new Room;
@@ -307,7 +614,17 @@ grave_23.southRoomId = 0;
 grave_23.westRoomId = 0;
 grave_23.eastRoomId = 0;  
 
-
+let inventory_24 = new Room;
+inventory_24.roomId = 24;
+inventory_24.roomTitle = "Inventory";
+inventory_24.roomDescription =
+"WELCOME TO INVENTORY";
+inventory_24.movingDirection = 
+"None\n";
+inventory_24.northRoomId = 0;
+inventory_24.southRoomId = 0;
+inventory_24.westRoomId = 0;
+inventory_24.eastRoomId = 0; 
 
 
 let rooms = [];
@@ -336,3 +653,6 @@ rooms.push(square_20);
 rooms.push(agnesHouse_21);
 rooms.push(kingsPalace_22);
 rooms.push(grave_23);
+rooms.push(inventory_24);
+
+

@@ -2,6 +2,10 @@ let roomImages = [];
 let characterImages = [];
 let itemImages = []
 
+document.addEventListener('contextmenu', event => {
+    event.preventDefault();
+});
+
 function preload() {
 
     // Room Images
@@ -29,6 +33,8 @@ function preload() {
     roomImages.push(loadImage("./images_becomethekinggame/room21.jpg"));
     roomImages.push(loadImage("./images_becomethekinggame/room22.png"));
     roomImages.push(loadImage("./images_becomethekinggame/room23.png"));
+    roomImages.push(loadImage("./images_becomethekinggame/room24.png"));
+
 
     // Character Images
     characterImages.push(0);
@@ -53,10 +59,48 @@ function preload() {
     
     // Item Images
 
+    itemImages.push(loadImage("./images_becomethekinggame/basket.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item00v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item00v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item00v02.png"));
 
-    
+    itemImages.push(loadImage("./images_becomethekinggame/item01v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item01v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item01v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/item02v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item02v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item02v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/item03v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item03v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item03v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/item04v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item04v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item04v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/item05v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item05v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item05v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/item06v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item06v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item06v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/item07v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item07v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item07v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/item08v00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item08v01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/item08v02.png"));
+
+    itemImages.push(loadImage("./images_becomethekinggame/dragonswordv00.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/dragonswordv01.png"));
+    itemImages.push(loadImage("./images_becomethekinggame/dragonswordv02.png"));
+
 }
-
 function setup() {
     frameRate(24);
     createCanvas(800, 400);
@@ -67,26 +111,19 @@ function draw() {
 
     background(0);
 
-    // Display Background Room Scene
-    drawBackgroundRoomScene();
-
-    // Display NPCs. (Non-Playable Characters)
-    drawNonPlayableCharacters();
-    
-    // Display Battle Characters
-    drawBattleOpponentCharacters();
-    
-    if (gameData.currentRoomId != 23) {
-        // Display Main Daphne Character
+    if (gameData.currentRoomId == 23) { // Death Room
+        drawBackgroundRoomScene();
+    } else if (gameData.currentRoomId == 24) { // Item Room
+        drawBackgroundRoomScene();
+        drawItems();
+    } else {
+        drawBackgroundRoomScene();
+        drawNonPlayableCharacters();
+        drawBattleOpponentCharacters();
         drawMainDaphneCharacter();
-
-        // Display Status Widgets
         drawStatusWidgets();
-
-        // Display Items
         drawItems();
     }
-
 
 }
 
@@ -152,13 +189,17 @@ function drawBattleOpponentCharacters() {
                     monster.h * (1 - 0.05 * multiplier));
             }
 
-            fill('white')
-            rect(monster.xStatusBox, monster.yStatusBox, 100, 5);
-            fill(163, 0, 0)
-            rect(monster.xStatusBox, monster.yStatusBox, 
-                100 * monster.healthPoint / monster.healthPointMax, 
-                5);
-    
+            if (index == 0) {
+                fill('white');
+                rect(monster.xStatusBox, monster.yStatusBox, 100, 5);
+                fill(163, 0, 0);
+                rect(monster.xStatusBox, monster.yStatusBox, 
+                    100 * monster.healthPoint / monster.healthPointMax, 
+                    5);
+        
+            }
+
+            
         }
     }
 
@@ -222,12 +263,170 @@ function drawStatusWidgets() {
     rect(90, 350, 
         200 * Daphne_1.healthPoint / Daphne_1.healthPointMax, 10);
     
+    //basket
+    image(itemImages[0], 35, 365);    
 }
+
+
+
+function doubleClicked() {
+    
+    let mX = mouseX;
+    let mY = mouseY;
+
+    if (gameData.currentRoomId == 24 
+        && detectAreaWithCoordinates(0, 3, 800, 1, 799, 400, 2, 399, mX, mY) ) {
+        gameData.currentRoomId = gameData.previousRoomId;
+    }
+}
+
+//
+// 0    100     200    300   400    500    600    700    800
+// [ 0,0 ][ 0,1 ][ 0,2 ][ 0,3 ][ 0,4 ][ 0,5 ][ 0,6 ][ 0,7 ]
+// [ 1,0 ][ 1,1 ][ 1,2 ][ 1,3 ][ 1,4 ][ 1,5 ][ 1,6 ][ 1,7 ]
+// [ 2,0 ][ 2,1 ][ 2,2 ][ 2,3 ][ 2,4 ][ 2,5 ][ 2,6 ][ 2,7 ]
+// [ 3,0 ][ 3,1 ][ 3,2 ][ 3,3 ][ 3,4 ][ 3,5 ][ 3,6 ][ 3,7 ]
+//
+//   mouseX, mouseY = (450, 150) => 1,4
+
+// item이 차지하는 area = (I, J)                 (I, J + size[1])
+//            2x2           (I + size[0], J)       (I + size[0], J + size[1])
+// 
+//
+// 
+// 
+
+// Some armour => IJ 0,4  =>   0,4   0,5    
+//                             1,4    1,5
+//              mouse == 1,4    
+// => inventory item id return 
+
 
 function drawItems() {
+    if (gameData.currentRoomId == 24) {
+        for (let i = 0; i < gameData.items.length; i++) {
+            let currentItem = gameData.items[i];
+            let locationI = currentItem.inventoryLocationIJ[0]
+            let locationJ = currentItem.inventoryLocationIJ[1]
+            // J = x 가로
+            // I = y 세로
+            if (currentItem.inventoryLocationSize[0] == 1) { //100x---
+                if ((currentItem.inventoryLocationSize[1]) == 1) {
+                    image(itemImages[1 + currentItem.itemId * 3], 
+                        locationJ * 100 + 50,
+                        locationI * 100 + 50);
+                }
+                else if ((currentItem.inventoryLocationSize[1]) == 3) {
+                    image(itemImages[1 + currentItem.itemId * 3], 
+                        locationJ * 100 + 50,
+                        locationI * 100 + 150);
+                }
+                else if ((currentItem.inventoryLocationSize[1]) == 4) {
+                    image(itemImages[1 + currentItem.itemId * 3], 
+                        locationJ * 100 + 50,
+                        200);
+                }
+                
+            }
+            else if (currentItem.inventoryLocationSize[0] == 2) {
+                if ((currentItem.inventoryLocationSize[1]) == 1) {
+                    image(itemImages[1 + currentItem.itemId * 3], 
+                        locationJ * 100 + 100,
+                        locationI * 100 + 50);
+                }
+                else if ((currentItem.inventoryLocationSize[1]) == 2) {
+                    image(itemImages[1 + currentItem.itemId * 3], 
+                        locationJ * 100 + 100,
+                        locationI * 100 + 100);
+                }
+                else if ((currentItem.inventoryLocationSize[1]) == 3) {
+                    image(itemImages[1 + currentItem.itemId * 3], 
+                        locationJ * 100 + 100,
+                        locationI * 100 + 150);
+                }
+                else if ((currentItem.inventoryLocationSize[1]) == 4) {
+                    image(itemImages[1 + currentItem.itemId * 3], 
+                        locationJ * 100 + 100,
+                        200);
+                }
+            }
+
+            
+           
+        }        
+    }
 
 }
 
+function changeItemPlaceInInventory() {
 
+    
+//1. mouseclicked
+//2. check if locations are empty - if empty - img change to green v. else - red v
+//when mouesclicked released - if empty = change place. else - no change
+
+
+
+}
+
+function mouseClicked() {
+
+    let mX = mouseX;
+    let mY = mouseY;
+
+    // Enter the item mode
+    if (detectAreaWithCoordinates(6, 330, 57, 331, 58, 383, 7, 362, mX, mY) 
+        && gameData.currentRoomId != 24) {
+        gameData.previousRoomId = gameData.currentRoomId;
+        gameData.currentRoomId = 24;
+    }
+
+    // mouseclick in inventory 
+    if (gameData.currentRoomId == 24) {
+        // 1. check if clicked space is filled = function
+        // 2. if filled = change img to green
+        //         mouseMoved: 
+        //      
+
+
+    }
+    
+}
+
+function mouseDragged() {
+    let mX = mouseX;
+    let mY = mouseY;
+    //console.log("X: " + mX + " || Y: " + mY);
+    
+    // determine which item in the inventory is clicked
+    let itemIndex = findItemIdOfSelectedImage(mX, mY);
+    console.log("CLICKED ITEM: " + itemIndex);
+
+    // when image clicked, move the image
+    let currentItem = gameData.items[itemIndex];
+    
+    
+
+    // TODO:
+    // 그림 계속 나와야함(노깜빢), 위치 수정, 드래그 가능하게, 드래그 하는 동안 그림이 나오도록)
+    image(itemImages[changeImageVersion(currentItem.itemId, 1)], 
+        400,
+        200);
+
+
+}
+
+function changeImageVersion(id, versionNumber) {
+    // 0 = regular version, 1 = green version, 2 = red version
+    if (versionNumber == 0) {
+        return (1 + id * 3);
+    }
+    else if (versionNumber == 1) {
+        return (2 + id * 3);
+    }
+    else if (versionNumber == 2) {
+        return (3 + id * 3);
+    }
+}
 
 

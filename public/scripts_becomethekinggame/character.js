@@ -55,7 +55,7 @@ class Character {
 let Daphne_1 = new Character;
 
 Daphne_1.characterId = 1;
-Daphne_1.level = 0;
+Daphne_1.level = 1;
 Daphne_1.experience = 0;
 Daphne_1.name = "Daphne";
 Daphne_1.occupation = "Peasant";
@@ -338,7 +338,7 @@ Ogre_10.x = 492;
 Ogre_10.y = 200;
 Ogre_10.w = 450;
 Ogre_10.h = 400;
-Ogre_10.xStatusBox = 390;
+Ogre_10.xStatusBox = 470;
 Ogre_10.yStatusBox = 30;
 
 let Gargoyle_11 = new Character;

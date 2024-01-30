@@ -13,11 +13,29 @@ function displayMessage(message) {
 }
 
 function displayCurrentLocation() {
+
+    // Display the Current Room
     message = "";
     message += rooms[gameData.currentRoomId].roomTitle;
     message += "\n";
     message += rooms[gameData.currentRoomId].roomDescription;
     message += rooms[gameData.currentRoomId].movingDirection;
+    message += "\n";
+
+   // Display Items
+   if (rooms[gameData.currentRoomId].items.length != 0) {
+    message += "The following items are in this room: "
+    let itemsString = ""
+    for (let i = 0; i < rooms[gameData.currentRoomId].items.length; i++) {
+        if (i != 0) {
+            itemsString += ", ";
+        }
+        itemsString += rooms[gameData.currentRoomId].items[i].name;
+    }
+    message += itemsString;
+} else {
+    message += "No items are in this room."
+}
 
     displayMessage(message);
 }
@@ -118,9 +136,6 @@ function processText() {
             }
         }
         
-        
-
-
     } else if (userInput == "t") {
         displayMessage("-----------NPC Attack Mode-----------");
         let currentRoom = rooms[gameData.currentRoomId];
@@ -183,8 +198,30 @@ function processText() {
                         
         }
 
-    }
+    } else if (userInput == "i") {
+        if (gameData.currentRoomId != 24) {
+            gameData.previousRoomId = gameData.currentRoomId;
+            gameData.currentRoomId = 24;
+        
+            displayMessage("================ ITEM MODE ================");
+        } 
+        else if (gameData.currentRoomId == 24) {
+            gameData.currentRoomId = gameData.previousRoomId;
+        
+            displayMessage("================ ITEM MODE EXIT ================");
+        }
 
+    } else if (userInput == "z") { // "z" for testing
+        
+        // rooms[gameData.currentRoomId].getItemFromRoom("apple");
+
+
+        
+
+    } else if (userInput.includes("get")) {
+        let itemInUserInput = userInput.replace("get ", "");
+        getItemFromRoom(itemInUserInput);
+    }
     
     // Display Directions
     displayCurrentLocation();
@@ -192,6 +229,24 @@ function processText() {
 
     displayMessage("Enter input: (type exit to quit) ");
 }
+
+
+
+
+function findAvailableItemIndex(itemName) {
+
+    let itemArray = rooms[gameData.currentRoomId].items;
+
+    for (let i = 0; i < itemArray.length; i++) {
+        if (itemArray[i].name == itemName) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+
 
 function calculateAdjustedRandomMoneyOrExp(moneyOrExp) {
     point = moneyOrExp * int(random(50, 150)) / 100;
@@ -243,10 +298,25 @@ function levelUp() {
         displayMessage("Daphne's magic point is now " + Daphne_1.magicPoint + " as she received " + added_magicPoint + ".");
         displayMessage("Daphne's energy point is now " + Daphne_1.energyPoint + " as she received " + added_energyPoint + ".");
 
+        if (Daphne_1.level == 20) {
+            displayMessage("---------------------------------------------");
+            displayMessage("            Daphne is now a KNIGHT            ");
+            displayMessage("---------------------------------------------");
+        }
+
+
+        if (Daphne_1.level == 70) {
+            displayMessage("---------------------------------------------");
+            displayMessage("            Daphne is now a NOBLE            ");
+            displayMessage("---------------------------------------------");
+        }
     }
+
 }
 
- 
+function cloneObject(object) {
+    return Object.assign({}, object);
+}
 
 // ==== ==== ==== ==== User Input Events ==== ==== ==== ====
 
@@ -260,5 +330,46 @@ inputField.addEventListener("keypress", (event) => {
     }
 });
 
+function calculateLineEquation(x1, y1, x2, y2) {
+    slope = (y2 - y1).toFixed(4) / (x2 - x1).toFixed(4);
+    intercept = y1 - ((y2 - y1).toFixed(4) / (x2 - x1).toFixed(4)) * x1;
+    return [slope, intercept];
+}
+
+function detectAreaWithCoordinates(x1, y1, x2, y2, x3, y3, x4, y4, a, b) {
+    line1_slope = calculateLineEquation(x1, y1, x2, y2)[0];
+    line1_intercept = calculateLineEquation(x1, y1, x2, y2)[1];
+    
+    line2_slope = calculateLineEquation(x2, y2, x3, y3)[0];
+    line2_intercept = calculateLineEquation(x2, y2, x3, y3)[1];
+    
+    line3_slope = calculateLineEquation(x3, y3, x4, y4)[0];
+    line3_intercept = calculateLineEquation(x3, y3, x4, y4)[1];
+    
+    line4_slope = calculateLineEquation(x4, y4, x1, y1)[0];
+    line4_intercept = calculateLineEquation(x4, y4, x1, y1)[1];
+    
+    condition1 = (b > (line1_slope * a + line1_intercept)) ? true : false;
+
+    if (line2_slope > 0) {
+        condition2 = (b > (line2_slope * a + line2_intercept)) ? true : false;
+    } else {
+        condition2 = (b < (line2_slope * a + line2_intercept)) ? true : false;
+    }
+
+    condition3 = (b < (line3_slope * a + line3_intercept)) ? true : false;
+
+    if (line4_slope > 0) {
+        condition4 = (b < (line4_slope * a + line4_intercept)) ? true : false;
+    } else {
+        condition4 = (b > (line4_slope * a + line4_intercept)) ? true : false;
+    }
+    
+    return condition1 && condition2 && condition3 && condition4;
+}
+
+function deepcopy(object) {
+    return Object.assign({}, object);
+}
 
 
