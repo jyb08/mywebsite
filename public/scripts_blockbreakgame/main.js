@@ -13,14 +13,14 @@ let imageColorBlocks = [];
 // ]
 
 let board = [
-    [-1, 1, -1, -1, -1, -1, -1, 0],
-    [-1, 1, -1, -1, -1, -1, -1, 0],
-    [-1, -1, 2, -1, -1, -1, -1, 0],
-    [-1, -1, -1, 3, -1, -1, -1, 0],
-    [-1, -1, -1, -1, 4, -1, -1, 0],
-    [-1, -1, -1, -1, -1, 5, -1, 2],
-    [-1, -1, -1, -1, -1, -1, 6, 3],
-    [0, 0, 0, 0, 0, 0, 0, 7],
+    [1, 1, -1, -1, 1, -1, -1, -1],
+    [-1, 1, -1, -1, -1, -1, -1, -1],
+    [-1, 1, -1, -1, -1, -1, -1, -1],
+    [-1, 1, -1, -1, -1, -1, -1, -1],
+    [-1, 1, -1, -1, -1, -1, -1, -1],
+    [-1, 1, -1, -1, -1, -1, -1, -1],
+    [-1, 1, -1, -1, -1, -1, -1, -1],
+    [0, -1, 0, 0, 0, 0, 0, 0],
 ]
 
 let mouseClickSensor = false;
@@ -54,6 +54,8 @@ tempBlock.shape = [
     [0, -1, -1],
     [-1, -1, -1]
 ];
+
+
 
 
 
@@ -92,6 +94,14 @@ function draw() {
     drawBoard();
     drawBlocks(tempBlock);
 
+    textAlign(CENTER, CENTER);
+    fill('rgb(255,255,255)');
+    textStyle(BOLD);
+
+    textSize(70);
+    
+    text("400", 250, 100);
+
 }
 
 
@@ -108,45 +118,61 @@ function mouseDragged() {
 }
 
 function deleteBlocksOnBoard() { //delete vertically or horizontally when full
-
-    // Delete Horizontal Lines
+    let flag_y;
+    let flag_x;
+    let set_i;
+    let set_j;
+    // Delete Vertical Lines
     for (let i = 0; i < 8; i++) {
-        let flag = true;
-
+        flag_y = true;
         for (let j = 0; j < 8; j++) {    
             if (board[i][j] != -1) {
-                flag = flag && true;
-            } else {
-                flag = flag && false;
-            }
+                flag_y = flag_y && true;
                 
+            } else {
+                flag_y = flag_y && false;
+            } 
         }
 
-        if (flag) {
-            for (let j = 0; j < 8; j++) {    
-                board[i][j] = -1;
-            }
+        if(flag_y){
+            set_i = i;
         }
+
+        
     }
 
-    // Delete Vertical Lines
-    for (let j = 0; j < 8; j++) {
-        let flag = true;
+    
 
+    // Delete Horizontal Lines
+    for (let j = 0; j < 8; j++) {
+        flag_x = true;
         for (let i = 0; i < 8; i++) {    
             if (board[i][j] != -1) {
-                flag = flag && true;
+                flag_x = flag_x && true;
+                
             } else {
-                flag = flag && false;
+                flag_x = flag_x && false;
             }
                 
+        }  
+    
+        if (flag_x) {
+            set_j = j;
         }
 
-        if (flag) {
-            for (let i = 0; i < 8; i++) {    
-                board[i][j] = -1;
-            }
-        }    
+         
+    }
+
+    if (flag_x) {
+        for (let i = 0; i < 8; i++) {    
+            board[i][set_j] = -1;
+        }
+    } 
+
+    if (flag_y) {
+        for (let j = 0; j < 8; j++) {    
+            board[set_i][j] = -1;
+        }
     }
 
 }
@@ -156,7 +182,7 @@ function drawBoard() {
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             if (board[i][j] != -1) {
-                image(imageColorBlocks[board[i][j]], 50 + 50*i, 150 + 50*j );
+                image(imageColorBlocks[board[i][j]], 50 + 50*i, 150 + 50*j);
             }
         }
     }

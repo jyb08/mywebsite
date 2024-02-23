@@ -191,7 +191,7 @@ function draw() {
         drawLastRoom();
     }
         
-    if (frameCountInitial != 0) {
+    while (frameCountInitial != 0) {
         transparency = 0;
         if (frameCount <= frameCountInitial + 5) {
             transparency = 255;
@@ -284,7 +284,8 @@ function calculateLineEquation(x1, y1, x2, y2) {
     intercept = y1 - ((y2 - y1).toFixed(4) / (x2 - x1).toFixed(4)) * x1;
     return [slope, intercept];
 }
-    
+
+
 function detectAreaWithCoordinates(x1, y1, x2, y2, x3, y3, x4, y4, a, b) {
     line1_slope = calculateLineEquation(x1, y1, x2, y2)[0];
     line1_intercept = calculateLineEquation(x1, y1, x2, y2)[1];
@@ -315,8 +316,8 @@ function detectAreaWithCoordinates(x1, y1, x2, y2, x3, y3, x4, y4, a, b) {
     }
     
     return condition1 && condition2 && condition3 && condition4;
-}
-    
+ }
+
 
 
 function drawMainScene() {
