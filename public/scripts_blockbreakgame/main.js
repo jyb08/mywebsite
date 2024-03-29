@@ -1,8 +1,5 @@
 let imageBackground;
 let imageColorBlocks = [];
-let imageColorBlocks_Extra1 = [];
-let imageColorBlocks_Extra2 = [];
-let imageColorBlocks_Extra3 = [];
 let imageWaitingBlocks = [];
 
 let waitingBlocks = [-1, -1, -1];
@@ -49,7 +46,7 @@ class Block {
             [ [-1, -1, -1], [-1, 9, -1], [9, -1, -1] ], // 0 //shapes[0]
             [ [-1, -1, -1], [-1, 9, -1], [-1, 9, -1] ], // 1
             [ [-1, 9, -1], [9, 9, -1], [-1, -1, -1] ],  // 2
-            [ [-1, -9, -1], [-1, 9, -1], [-1, 9, -1] ], // 3
+            [ [-1, 9, -1], [-1, 9, -1], [-1, 9, -1] ], // 3
             [ [-1, -1, 9], [-1, 9, -1], [-1, 9, -1] ], // 4
             [ [-1, -1, -1], [9, 9, 9], [-1, -1, 9] ], // 5
             [ [-1, -1, -1], [9, 9, 9], [9, -1, -1] ], // 6
@@ -169,36 +166,6 @@ function preload() {
     imageBlockTransparent = loadImage("./images_blockbreakgame/square_transparent.png");
     imageColorBlocks.push(imageBlockTransparent);
 
-    // imageColorBlocks_Extra1
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_red.png"));
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_orange.png"));
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_yellow.png"));
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_green.png"));
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_blue.png"));
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_navy.png"));
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_pink.png"));
-    imageColorBlocks_Extra1.push(loadImage("./images_blockbreakgame/square_transparent.png"));
-
-    // imageColorBlocks_Extra2
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_red.png"));
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_orange.png"));
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_yellow.png"));
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_green.png"));
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_blue.png"));
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_navy.png"));
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_pink.png"));
-    imageColorBlocks_Extra2.push(loadImage("./images_blockbreakgame/square_transparent.png"));
-
-    // imageColorBlocks_Extra3
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_red.png"));
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_orange.png"));
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_yellow.png"));
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_green.png"));
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_blue.png"));
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_navy.png"));
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_pink.png"));
-    imageColorBlocks_Extra3.push(loadImage("./images_blockbreakgame/square_transparent.png"));
-
     // waiting blocks
     imageNonSelectedBlock = loadImage("./images_blockbreakgame/non_selected.png");
     imageWaitingBlocks.push(imageNonSelectedBlock);
@@ -304,7 +271,24 @@ function drawBoard() {
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             if (board[i][j] != -1) {
-                image(imageColorBlocks[board[i][j]], 50 + 50*j, 150 + 50*i);
+                
+                let imageNumber = board[i][j];    
+                
+                if (imageNumber == 0) {
+                    image(imageBlockRed, 50 + 50*j, 150 + 50*i);
+                } else if (imageNumber == 1) {
+                    image(imageBlockOrange, 50 + 50*j, 150 + 50*i);
+                } else if (imageNumber == 2) {
+                    image(imageBlockYellow, 50 + 50*j, 150 + 50*i);
+                } else if (imageNumber == 3) {
+                    image(imageBlockGreen, 50 + 50*j, 150 + 50*i);
+                } else if (imageNumber == 4) {
+                    image(imageBlockBlue, 50 + 50*j, 150 + 50*i);
+                } else if (imageNumber == 5) {
+                    image(imageBlockNavy, 50 + 50*j, 150 + 50*i);
+                } else if (imageNumber == 6) {
+                    image(imageBlockPink, 50 + 50*j, 150 + 50*i);
+                } 
             }
         }
     }
@@ -315,7 +299,24 @@ function drawBlocks(block) {
     for (let i = 0; i <= 2; i++) {
         for (let j = 0; j <= 2; j++) {
             if (block.shape[i][j] != -1) {
-                image(imageColorBlocks[block.shape[i][j]], mouseX + 50*j, mouseY + 50*i);
+
+                let imageNumber = block.shape[i][j];    
+                
+                if (imageNumber == 0) {
+                    image(imageBlockRed, mouseX + 50*j, mouseY + 50*i);
+                } else if (imageNumber == 1) {
+                    image(imageBlockOrange, mouseX + 50*j, mouseY + 50*i);
+                } else if (imageNumber == 2) {
+                    image(imageBlockYellow, mouseX + 50*j, mouseY + 50*i);
+                } else if (imageNumber == 3) {
+                    image(imageBlockGreen, mouseX + 50*j, mouseY + 50*i);
+                } else if (imageNumber == 4) {
+                    image(imageBlockBlue, mouseX + 50*j, mouseY + 50*i);
+                } else if (imageNumber == 5) {
+                    image(imageBlockNavy, mouseX + 50*j, mouseY + 50*i);
+                } else if (imageNumber == 6) {
+                    image(imageBlockPink, mouseX + 50*j, mouseY + 50*i);
+                } 
             }
         }
         
@@ -342,12 +343,10 @@ function drawBlocksOnSelectionBar() {
             if (waitingBlocks[0] != -1) {
                 let iBlockNumber = waitingBlocks[0].shape[i][j];
                 if (iBlockNumber != -1) {
-                    //console.log("ERROR!!!! HERE!!!: " + iBlockNumber);
-
-                    // if () {
-                    //     console.log("I AM DYING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ");
-                    // }
-                    image(imageColorBlocks_Extra1[iBlockNumber],      
+                    
+                    // TODO: CHANGE ALL IMAGE FUNCTIONS TO IF ELSE STATEMENTS
+                    
+                    image(imageColorBlocks[0],      
                         50 + j * 30, 616 + i * 30, 30, 30)
                 }
 
@@ -356,7 +355,7 @@ function drawBlocksOnSelectionBar() {
             if (waitingBlocks[1] != -1) {
                 let iBlockNumber = waitingBlocks[1].shape[i][j];
                 if (iBlockNumber != -1) {
-                    image(imageColorBlocks_Extra2[iBlockNumber], 
+                    image(imageColorBlocks[0], 
                         203 + j * 30, 616 + i * 30, 30, 30)
                 }
 
@@ -365,7 +364,7 @@ function drawBlocksOnSelectionBar() {
             if (waitingBlocks[2] != -1) {
                 let iBlockNumber = waitingBlocks[2].shape[i][j];
                 if (iBlockNumber != -1) {
-                    image(imageColorBlocks_Extra3[iBlockNumber], 
+                    image(imageColorBlocks[0], 
                         360 + j * 30, 616 + i * 30, 30, 30)
                 }
             }
