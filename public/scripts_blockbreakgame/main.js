@@ -3,27 +3,27 @@ let imageColorBlocks = [];
 let imageWaitingBlocks = [];
 
 let waitingBlocks = [-1, -1, -1];
-// let board = [
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1, -1, -1, -1],
-// ]
-
 let board = [
-    [-1, 1, -1, 0, 0, -1, -1, 3],
-    [-1, 1, -1, 3, 1, -1, -1, 4],
-    [-1, -1, 2, 0, 6, -1, -1, -1],
-    [-1, -1, -1, 4, 0, -1, -1, -1],
-    [-1, -1, -1, 0, 6, -1, -1, -1],
-    [-1, -1, -1, 2, 0, 5, -1, 2],
-    [-1, -1, -1, 0, 3, -1, 6, 3],
-    [0, 4, 2, 6, 4, 1, 4, 5],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
 ]
+
+// let board = [
+//     [-1, 1, -1, 0, 0, -1, -1, 3],
+//     [-1, 1, -1, 3, 1, -1, -1, 4],
+//     [-1, -1, 2, 0, 6, -1, -1, -1],
+//     [-1, -1, -1, 4, 0, -1, -1, -1],
+//     [-1, -1, -1, 0, 6, -1, -1, -1],
+//     [-1, -1, -1, 2, 0, 5, -1, 2],
+//     [-1, -1, -1, 0, 3, -1, 6, 3],
+//     [0, 4, 2, 6, 4, 1, 4, 5],
+// ]
 
 let mouseClickSensor = false;
 
@@ -343,11 +343,23 @@ function drawBlocksOnSelectionBar() {
             if (waitingBlocks[0] != -1) {
                 let iBlockNumber = waitingBlocks[0].shape[i][j];
                 if (iBlockNumber != -1) {
-                    
-                    // TODO: CHANGE ALL IMAGE FUNCTIONS TO IF ELSE STATEMENTS
-                    
-                    image(imageColorBlocks[0],      
-                        50 + j * 30, 616 + i * 30, 30, 30)
+                
+                    if (iBlockNumber == 0) {
+                        image(imageBlockRed, 50 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 1) {
+                        image(imageBlockOrange, 50 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 2) {
+                        image(imageBlockYellow, 50 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 3) {
+                        image(imageBlockGreen, 50 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 4) {
+                        image(imageBlockBlue, 50 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 5) {
+                        image(imageBlockNavy, 50 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 6) {
+                        image(imageBlockPink, 50 + j * 30, 616 + i * 30, 30, 30);
+                    } 
+
                 }
 
             }
@@ -355,8 +367,23 @@ function drawBlocksOnSelectionBar() {
             if (waitingBlocks[1] != -1) {
                 let iBlockNumber = waitingBlocks[1].shape[i][j];
                 if (iBlockNumber != -1) {
-                    image(imageColorBlocks[0], 
-                        203 + j * 30, 616 + i * 30, 30, 30)
+
+                    if (iBlockNumber == 0) {
+                        image(imageBlockRed, 203 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 1) {
+                        image(imageBlockOrange, 203 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 2) {
+                        image(imageBlockYellow, 203 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 3) {
+                        image(imageBlockGreen, 203 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 4) {
+                        image(imageBlockBlue, 203 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 5) {
+                        image(imageBlockNavy, 203 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 6) {
+                        image(imageBlockPink, 203 + j * 30, 616 + i * 30, 30, 30);
+                    } 
+
                 }
 
             }
@@ -364,8 +391,23 @@ function drawBlocksOnSelectionBar() {
             if (waitingBlocks[2] != -1) {
                 let iBlockNumber = waitingBlocks[2].shape[i][j];
                 if (iBlockNumber != -1) {
-                    image(imageColorBlocks[0], 
-                        360 + j * 30, 616 + i * 30, 30, 30)
+                    
+                    if (iBlockNumber == 0) {
+                        image(imageBlockRed, 360 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 1) {
+                        image(imageBlockOrange, 360 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 2) {
+                        image(imageBlockYellow, 360 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 3) {
+                        image(imageBlockGreen, 360 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 4) {
+                        image(imageBlockBlue, 360 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 5) {
+                        image(imageBlockNavy, 360 + j * 30, 616 + i * 30, 30, 30);
+                    } else if (iBlockNumber == 6) {
+                        image(imageBlockPink, 360 + j * 30, 616 + i * 30, 30, 30);
+                    } 
+                    
                 }
             }
 
