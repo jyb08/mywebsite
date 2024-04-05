@@ -26,7 +26,8 @@ let board = [
 // ]
 
 let mouseClickSensor = false;
-
+let globalScore = 0;
+let globalScoreComboCount = 0;
 
 
 class Block {
@@ -133,6 +134,19 @@ class Block {
             }
         }
     }
+
+    getSize() {
+        let size = 0;
+        for (let i = 0; i <= 2; i++) {
+            for (let j = 0; j <= 2; j++) {
+                if (this.shape[i][j] != -1) {
+                    size++;
+                }
+
+            }
+        }
+        return size;
+    }
     
 }
 
@@ -189,15 +203,15 @@ function setup() {
     waitingBlocks[1] = block01;
     waitingBlocks[2] = block02;
 
+    font = loadFont("./fonts/BungeeSpice-Regular.ttf");
+
 }
 
 function draw() {
 
     background(imageBackground);
 
-    drawCrown();
-
-    deleteBlocksOnBoard();
+    drawCrownAndScore();
 
     drawBoard();
 
@@ -208,6 +222,8 @@ function draw() {
     drawSelectedBlocks();
 
     drawBlocksOnSelectionBar();
+    
+    
 
 }
 
@@ -218,7 +234,7 @@ function doubleClicked() {
 }
 
 function mouseClicked() {
-    console.log("X: " + mouseX + "  /  Y: " + mouseY);
+    
 
     mouseClickSensor = true;
     let ij = detectBoardLocationWithMouse();
@@ -235,6 +251,7 @@ function mouseClicked() {
                 }
             }
 
+            deleteBlocksOnBoard(tempBlock);
             waitingBlocks[locationBlocksSelected] = -1;
             locationBlocksSelected = -1;
 
@@ -258,6 +275,18 @@ function mouseClicked() {
         locationBlocksSelected = -1;
     }
 
+
+    let testShape = [ 
+        [-1, -1, -1], 
+        [9, 9, 9], 
+        [9, -1, -1] ];
+        
+    console.log("DEBUG - testShape: ");
+    console.log(testShape);
+    let resultingShape = convertEssentialComparisonShape(testShape);
+    
+    console.log("DEBUG - resultingShape: ");
+    console.log(resultingShape);
 }
 
 function mouseDragged() {
@@ -416,9 +445,18 @@ function drawBlocksOnSelectionBar() {
 
 }
 
-function drawCrown() {
+function drawCrownAndScore() {
     // let size = 100 + 500*sin(frameCount/10)
     image(imageCrown, 7, 0);
+
+    textSize(45);
+    fill(255, 255, 255, 210);
+    textAlign(LEFT, CENTER);
+    textFont(font);
+
+    text(globalScore, 70, 33);
+
+    
 }
 
 function isBlockPositionEmpty(tempBlock) {
@@ -471,9 +509,119 @@ function drawHoveringBlockProjection() {
     }   
 }
 
+/*  ==== ==== ==== ==== Board-Block Matching Algorithms ==== ==== ==== ==== */
+
+/**
+ * Accept 3x3 block arrays to convert it as arrays for empty-spot detection.
+ * Resulting arrays can be any dimension (2x3, 2x2, etc.)
+ * Horizontal variables will contain the x coordinate 
+ * Vertical variables will contain the y coordinate
+ */
+function convertEssentialComparisonShape(originalShape) { 
+
+
+    /////////////!!!!!!!!!!!!!!!!!!! TODO: TEST THIS THOROUGHLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    // Vertical Top
+    let verticalTop = -1;
+    
+    for (let x = 0; x <= 2; x++) {
+        if (originalShape[x][0] != -1 
+            && originalShape[x][1] != -1  
+            && originalShape[x][1] != -1  
+            && verticalTop == -1) {
+                verticalTop = x;  
+        } 
+    }
+
+    // Vertical Bottom
+    let verticalBottom = -1;
+    
+    for (let x = 2; x >= 0; x--) {
+        if (originalShape[x][0] != -1 
+            && originalShape[x][1] != -1  
+            && originalShape[x][1] != -1  
+            && verticalBottom == -1) {
+                verticalBottom = x;  
+        } 
+    }
+
+    
+    // Horizontal Left
+    let horizontalLeft = -1;
+
+    for (let y = 0; y <= 2; y++) {
+        if (originalShape[0][y] != -1 
+            && originalShape[1][y] != -1  
+            && originalShape[2][y] != -1  
+            && horizontalLeft == -1) {
+                horizontalLeft = y;  
+        } 
+    }
+
+
+    
+    // Horizontal Right
+    let horizontalRight = -1;
+
+    for (let y = 2; y >= 0; y--) {
+        if (originalShape[0][y] != -1 
+            && originalShape[1][y] != -1  
+            && originalShape[2][y] != -1  
+            && horizontalRight == -1) {
+                horizontalRight = y;  
+        } 
+    }
+
+    // for (let x = 0; x <= 2; x++) {
+    //     for (let y = 0; y <= 2; y++) {
+
+    //         if (originalShape[x][y] != -1 && verticalTop == -1) {
+    //             verticalTop = x;
+    //         }
+
+    //         if (originalShape[x][y] != -1 && horizontalLeft == -1) {
+    //             horizontalLeft = y;
+    //             console.log("DEBUG - HL: " + horizontalLeft);
+
+    //         }
+
+    //     }
+    // }
+
+
+    // for (let x = 2; x >= 0; x--) {
+    //     for (let y = 2; y >= 0; y--) {
+
+    //         if (originalShape[x][y] != -1 && verticalBottom == -1) {
+    //             verticalBottom = x;
+    //         }
+
+    //         if (originalShape[x][y] != -1 && horizontalRight == -1) {
+    //             horizontalRight = y;
+    //             console.log("DEBUG - HR: " + horizontalRight);
+    //         }
+
+    //     }
+    // }
+
+    // Vertical Slice
+    let resultingShapeVSliced = originalShape.slice(verticalTop, verticalBottom + 1);
+
+    // Horizotal Slice
+    for (let j = 0; j < resultingShapeVSliced.length; j++) {
+        resultingShapeVSliced[j] 
+            = resultingShapeVSliced[j].slice(horizontalLeft, horizontalRight + 1);
+    }
+    
+    let resultingShape = resultingShapeVSliced;
+
+    return resultingShape;
+}
+
 /*  ==== ==== ==== ==== Game Mechanics ==== ==== ==== ==== */
 
-function deleteBlocksOnBoard() { //delete vertically or horizontally when full
+function deleteBlocksOnBoard(currentBlock) { //delete vertically or horizontally when full
     let tempBoard = [
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
@@ -484,6 +632,9 @@ function deleteBlocksOnBoard() { //delete vertically or horizontally when full
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
     ]
+
+    let numberOfDeletedLines = 0;
+    let blockDeleted = false;
 
     // Delete Horizontal Lines
     for (let i = 0; i < 8; i++) {
@@ -499,9 +650,10 @@ function deleteBlocksOnBoard() { //delete vertically or horizontally when full
         }
 
         if (flag) {
-            for (let j = 0; j < 8; j++) {    
+            for (let j = 0; j < 8; j++) {   
                 tempBoard[i][j] = -2;
             }
+            numberOfDeletedLines++;
         }
     }
 
@@ -515,23 +667,53 @@ function deleteBlocksOnBoard() { //delete vertically or horizontally when full
             } else {
                 flag = flag && false;
             }
-                
         }
 
         if (flag) {
             for (let i = 0; i < 8; i++) {    
                 tempBoard[i][j] = -2;
             }
+            numberOfDeletedLines++;
         }    
     }
 
+    // Delete Actual Blocks
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {    
             if (tempBoard[i][j] == -2) {
                 board[i][j] = -1;
+                blockDeleted = true;
             }
         }
     }
+
+    /**
+     * Calculate Scores
+     */ 
+    
+    // placed block size - score increases as the number of block placed increases
+    globalScore += currentBlock.getSize(); 
+
+    // canceled line - single line -> + 10
+    // double cancel - +10^2 
+    // triple cancel - +10^3
+    if (numberOfDeletedLines > 0 && numberOfDeletedLines <= 3) {
+        globalScore += pow(10, numberOfDeletedLines);
+    }
+
+    // later: 10^3 x a (4 cancel = 4000) (5 cancel = 5000)
+    if (numberOfDeletedLines >= 4) {
+        globalScore += (pow(10, 3)*(numberOfDeletedLines));
+    }
+
+    // combo + comboCount = 20^comboCount
+    if (blockDeleted == false) {
+        globalScoreComboCount = 0;
+    } else {
+        globalScoreComboCount++;
+    }
+    globalScore += pow(10, globalScoreComboCount);
+
     
 }
 
@@ -546,19 +728,6 @@ function detectBoardLocationWithMouse() {
     
     return ij;
 }
-
-function calculuateScore() {
-    let overallPoint = 0;
-
-
-    // placed block size - 1개면 1점, 9개면, 9점
-    // canceled line - 한줄이 나가면 10점
-    // double cancel - 10^2 
-    // triple cancel - 10^3
-    // later: 10^3 x a (4 cancel = 4000) (5 cancel = 5000)
-    // combo + comboCount = 100 + 5^comboCount
-}
-
 
 function calculateGameOver() {
 
