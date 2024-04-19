@@ -4,25 +4,18 @@ let imageWaitingBlocks = [];
 
 let waitingBlocks = [-1, -1, -1];
 let board = [
-    [-1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, 1, -1, 0, 0, -1, -1, 3],
+    [-1, 1, -1, 3, 1, -1, -1, 4],
+    [-1, -1, 2, 0, 6, 4, -1, -1],
+    [-1, 2, -1, 4, 0, -1, 4, -1],
+    [-1, 4, -1, 0, 6, 6, -1, -1],
+    [-1, -1, -1, 2, 0, 5, -1, 2],
+    [-1, 3 -1, 0, 3, -1, 6, 3],
+    [0, 4, 2, 6, 4, 1, 4, 5],
 ]
 
 // let board = [
-//     [-1, 1, -1, 0, 0, -1, -1, 3],
-//     [-1, 1, -1, 3, 1, -1, -1, 4],
-//     [-1, -1, 2, 0, 6, -1, -1, -1],
-//     [-1, -1, -1, 4, 0, -1, -1, -1],
-//     [-1, -1, -1, 0, 6, -1, -1, -1],
-//     [-1, -1, -1, 2, 0, 5, -1, 2],
-//     [-1, -1, -1, 0, 3, -1, 6, 3],
-//     [0, 4, 2, 6, 4, 1, 4, 5],
+
 // ]
 
 let mouseClickSensor = false;
@@ -192,6 +185,9 @@ function preload() {
 
     // crown
     imageCrown = loadImage("./images_blockbreakgame/crown.png")
+
+    //gameOver
+    gameOver = loadImage("./images_blockbreakgame/gameOver.png")
 }
 
 function setup() {
@@ -217,7 +213,6 @@ function draw() {
 
     drawHoveringBlockProjection();
 
-    calculateGameOver();
 
     drawSelectedBlocks();
 
@@ -277,16 +272,28 @@ function mouseClicked() {
 
 
     let testShape = [ 
-        [-1, -1, -1], 
         [9, 9, 9], 
-        [9, -1, -1] ];
+        [-1, -1, 9], 
+        [-1, -1, -1] 
+    ];
         
-    console.log("DEBUG - testShape: ");
-    console.log(testShape);
-    let resultingShape = convertEssentialComparisonShape(testShape);
+    // console.log("DEBUG - testShape: ");
+    // console.log(testShape);
+    // let resultingShape = convertEssentialComparisonShape(testShape);
     
-    console.log("DEBUG - resultingShape: ");
-    console.log(resultingShape);
+    // console.log("DEBUG - resultingShape: ");
+    // console.log(resultingShape);
+    
+    //console.log("DEBUG - CHECKING AVAIL: ");
+
+    
+    //console.log(slicedShape);
+    //let result = checkSpaceAvailability(slicedShape);
+    //c/onsole.log(result);
+    //checkSpaceAvailability(slicedShape);
+
+    //console.log("X: " + mouseX + " Y: " + mouseY);
+    
 }
 
 function mouseDragged() {
@@ -511,6 +518,64 @@ function drawHoveringBlockProjection() {
 
 /*  ==== ==== ==== ==== Board-Block Matching Algorithms ==== ==== ==== ==== */
 
+
+
+
+// let board = [
+//     [-1,  1, -1,  0,  0, -1, -1,  3],
+//     [-1,  1, -1,  3,  1, -1, -1,  4],
+//     [-1, -1,  2,  0,  6, -1, -1, -1],
+//     [-1, -1, -1,  4,  0, -1, -1, -1],
+//     [-1, -1, -1,  0,  6, -1, -1, -1],
+//     [-1, -1, -1,  2,  0,  5, -1,  2],
+//     [-1, -1, -1,  0,  3, -1,  6,  3],
+//     [ 0,  4,  2,  6,  4,  1,  4,  5],
+// ] // EXAMPLE BOARD, DELETE AFTER COMPLETING THE FUNCTION!!!!!!!!!!!!!!!!!!!!!
+
+/**
+ 
+window를 슬라이스드쉐이프에 다이멘션에 맞춰서 자르고, 잘린 보드 window를 모양이랑 비교. 
+ */
+function checkSpaceAvailability(slicedShape) {
+
+    let result = false;
+
+    let xLength = slicedShape[0].length;
+    let yLength = slicedShape.length;
+    
+    let numberOfFilledBlocks = 0;
+    for (let a = 0; a < yLength; a++) {
+        for (let b = 0; b < xLength; b++) {
+            if (slicedShape[a][b] != -1) {
+                numberOfFilledBlocks++;
+            } 
+        } 
+    }  
+    for (let y = 0; y < 8 - yLength + 1; y++) {
+        for (let x = 0; x < 8 - xLength + 1; x++) {
+            let i = 0; 
+            
+            
+
+            for (let a = 0; a < yLength; a++) {
+                for (let b = 0; b < xLength; b++) {
+                    if (slicedShape[a][b] != -1 && board[y + a][x + b] == -1) {
+                        //console.log("TRUE " + a + ',' + b);
+                            // HERE  TODO: dimension의 크기의 맞는 
+                            // number of times all true여야지면 TRUE이도록 edit 하시오.
+                        i++;
+                    }
+                }
+            }
+            //console.log("new" + " & i= " + i);
+            if (numberOfFilledBlocks == i) {
+                result = true;
+            }
+        }
+    }
+    return result;
+}
+
 /**
  * Accept 3x3 block arrays to convert it as arrays for empty-spot detection.
  * Resulting arrays can be any dimension (2x3, 2x2, etc.)
@@ -520,90 +585,46 @@ function drawHoveringBlockProjection() {
 function convertEssentialComparisonShape(originalShape) { 
 
 
-    /////////////!!!!!!!!!!!!!!!!!!! TODO: TEST THIS THOROUGHLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    // Vertical Top
     let verticalTop = -1;
-    
-    for (let x = 0; x <= 2; x++) {
-        if (originalShape[x][0] != -1 
-            && originalShape[x][1] != -1  
-            && originalShape[x][1] != -1  
-            && verticalTop == -1) {
-                verticalTop = x;  
-        } 
-    }
-
-    // Vertical Bottom
     let verticalBottom = -1;
-    
-    for (let x = 2; x >= 0; x--) {
-        if (originalShape[x][0] != -1 
-            && originalShape[x][1] != -1  
-            && originalShape[x][1] != -1  
-            && verticalBottom == -1) {
-                verticalBottom = x;  
-        } 
-    }
-
-    
-    // Horizontal Left
     let horizontalLeft = -1;
-
-    for (let y = 0; y <= 2; y++) {
-        if (originalShape[0][y] != -1 
-            && originalShape[1][y] != -1  
-            && originalShape[2][y] != -1  
-            && horizontalLeft == -1) {
-                horizontalLeft = y;  
-        } 
-    }
-
-
-    
-    // Horizontal Right
     let horizontalRight = -1;
 
-    for (let y = 2; y >= 0; y--) {
-        if (originalShape[0][y] != -1 
-            && originalShape[1][y] != -1  
-            && originalShape[2][y] != -1  
-            && horizontalRight == -1) {
-                horizontalRight = y;  
-        } 
+    for (let x = 0; x <= 2; x++) {
+        for (let y = 0; y <= 2; y++) {
+            if (originalShape[x][y] != -1 && verticalTop == -1) {
+                verticalTop = x;
+            }
+        }
     }
 
-    // for (let x = 0; x <= 2; x++) {
-    //     for (let y = 0; y <= 2; y++) {
-
-    //         if (originalShape[x][y] != -1 && verticalTop == -1) {
-    //             verticalTop = x;
-    //         }
-
-    //         if (originalShape[x][y] != -1 && horizontalLeft == -1) {
-    //             horizontalLeft = y;
-    //             console.log("DEBUG - HL: " + horizontalLeft);
-
-    //         }
-
-    //     }
-    // }
+    for (let y = 0; y <= 2; y++) {
+        for (let x = 0; x <= 2; x++) {
+            if (originalShape[x][y] != -1 && horizontalLeft == -1) {
+                horizontalLeft = y;
+            }
+        }
+    }
 
 
-    // for (let x = 2; x >= 0; x--) {
-    //     for (let y = 2; y >= 0; y--) {
+    for (let x = 2; x >= 0; x--) {
+        for (let y = 2; y >= 0; y--) {
+            if (originalShape[x][y] != -1 && verticalBottom == -1) {
+                verticalBottom = x;
+            }
+        }
+    }
 
-    //         if (originalShape[x][y] != -1 && verticalBottom == -1) {
-    //             verticalBottom = x;
-    //         }
+    for (let y = 2; y >= 0; y--) {
+        for (let x = 2; x >= 0; x--) {
+            if (originalShape[x][y] != -1 && horizontalRight == -1) {
+                horizontalRight = y;
+            }
+        }
+    }
 
-    //         if (originalShape[x][y] != -1 && horizontalRight == -1) {
-    //             horizontalRight = y;
-    //             console.log("DEBUG - HR: " + horizontalRight);
-    //         }
 
-    //     }
-    // }
+
 
     // Vertical Slice
     let resultingShapeVSliced = originalShape.slice(verticalTop, verticalBottom + 1);
@@ -729,8 +750,16 @@ function detectBoardLocationWithMouse() {
     return ij;
 }
 
+//to DO: CHANGE CODE B/C THERE ARENT ALWAYS 3 WAITING BLOCKS
+//TO DO: FIGURE OUT WHERE TO CALL THIS FUNCTION
+// CHECK IF THIS FUNCTION WORKS PROPERLY
+// THEN IMPLEMNT THE ALGORITHM TO EASE THE GAME AND STRAIN IT FROM ENDING. 
 function calculateGameOver() {
-
+    if (checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[0])) == false
+        && checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[1])) == false
+        && checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[2])) == false) {
+        image(gameOver, 75, 270);
+        }
 }
 
 function calculateLineEquation(x1, y1, x2, y2) {
