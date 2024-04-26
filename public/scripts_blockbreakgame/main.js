@@ -4,23 +4,24 @@ let imageWaitingBlocks = [];
 
 let waitingBlocks = [-1, -1, -1];
 let board = [
-    [-1, 1, -1, 0, 0, -1, -1, 3],
-    [-1, 1, -1, 3, 1, -1, -1, 4],
-    [-1, -1, 2, 0, 6, 4, -1, -1],
-    [-1, 2, -1, 4, 0, -1, 4, -1],
-    [-1, 4, -1, 0, 6, 6, -1, -1],
-    [-1, -1, -1, 2, 0, 5, -1, 2],
-    [-1, 3 -1, 0, 3, -1, 6, 3],
-    [0, 4, 2, 6, 4, 1, 4, 5],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1],
+
 ]
 
-// let board = [
 
-// ]
 
 let mouseClickSensor = false;
 let globalScore = 0;
 let globalScoreComboCount = 0;
+let isItOver = null;
+
 
 
 class Block {
@@ -156,21 +157,21 @@ function preload() {
     imageBoard = loadImage("./images_blockbreakgame/blank_board.png")
 
     // imageColorBlocks
-    imageBlockRed = loadImage("./images_blockbreakgame/square_red.png");
+    imageBlockRed = loadImage("./images_blockbreakgame/square_red.png"); // 0
     imageColorBlocks.push(imageBlockRed);
-    imageBlockOrange = loadImage("./images_blockbreakgame/square_orange.png");
+    imageBlockOrange = loadImage("./images_blockbreakgame/square_orange.png"); // 1
     imageColorBlocks.push(imageBlockOrange);
-    imageBlockYellow = loadImage("./images_blockbreakgame/square_yellow.png");
+    imageBlockYellow = loadImage("./images_blockbreakgame/square_yellow.png"); // 2
     imageColorBlocks.push(imageBlockYellow);
-    imageBlockGreen = loadImage("./images_blockbreakgame/square_green.png");
+    imageBlockGreen = loadImage("./images_blockbreakgame/square_green.png"); // 3
     imageColorBlocks.push(imageBlockGreen);
-    imageBlockBlue = loadImage("./images_blockbreakgame/square_blue.png");
+    imageBlockBlue = loadImage("./images_blockbreakgame/square_blue.png"); // 4
     imageColorBlocks.push(imageBlockBlue);
-    imageBlockNavy = loadImage("./images_blockbreakgame/square_navy.png");
+    imageBlockNavy = loadImage("./images_blockbreakgame/square_navy.png"); // 5
     imageColorBlocks.push(imageBlockNavy);
-    imageBlockPink = loadImage("./images_blockbreakgame/square_pink.png");
+    imageBlockPink = loadImage("./images_blockbreakgame/square_pink.png"); //6
     imageColorBlocks.push(imageBlockPink);
-    imageBlockTransparent = loadImage("./images_blockbreakgame/square_transparent.png");
+    imageBlockTransparent = loadImage("./images_blockbreakgame/square_transparent.png"); // 7
     imageColorBlocks.push(imageBlockTransparent);
 
     // waiting blocks
@@ -218,7 +219,10 @@ function draw() {
 
     drawBlocksOnSelectionBar();
     
-    
+    if (isItOver) {
+        image(gameOver, 75, 270); 
+    }
+
 
 }
 
@@ -230,6 +234,10 @@ function doubleClicked() {
 
 function mouseClicked() {
     
+    if (isItOver) {
+        window.location.reload();
+        return;
+    }
 
     mouseClickSensor = true;
     let ij = detectBoardLocationWithMouse();
@@ -242,7 +250,10 @@ function mouseClicked() {
                 for (let b = -1; b <= 1; b++) {
                     if (tempBlock.shape[1 + b][1 + a] != -1) {
                         board[ij[1] + b][ij[0] + a] = tempBlock.shape[1 + b][1 + a];
-                    }
+                    } 
+                    // else {
+                    //     board[ij[1] + b][ij[0] + a] = -1;
+                    // }
                 }
             }
 
@@ -252,9 +263,7 @@ function mouseClicked() {
 
             // newly load the 3 blocks
             if (waitingBlocks[0] == -1 && waitingBlocks[1] == -1 && waitingBlocks[2] == -1) {
-                waitingBlocks[0] = new Block;
-                waitingBlocks[1] = new Block;
-                waitingBlocks[2] = new Block;
+                refillNew3Blocks();
             }
             
         }
@@ -271,12 +280,14 @@ function mouseClicked() {
     }
 
 
-    let testShape = [ 
-        [9, 9, 9], 
-        [-1, -1, 9], 
-        [-1, -1, -1] 
-    ];
-        
+    // let testShape = [ 
+    //     [9, 9, 9], 
+    //     [-1, -1, 9], 
+    //     [-1, -1, -1] 
+    // ];
+    
+    calculateGameOver();
+
     // console.log("DEBUG - testShape: ");
     // console.log(testShape);
     // let resultingShape = convertEssentialComparisonShape(testShape);
@@ -293,6 +304,28 @@ function mouseClicked() {
     //checkSpaceAvailability(slicedShape);
 
     //console.log("X: " + mouseX + " Y: " + mouseY);
+    
+    
+}
+
+function refillNew3Blocks() {
+
+    for (let j = 0; j < 3; j++) {
+        let i = 0;
+        while (i < 10) {
+            let tempBlock = new Block;
+            if (checkSpaceAvailability(tempBlock.shape)) {
+                waitingBlocks[j] = tempBlock;
+                console.log( "[" + j + "]  EASY BLOCK!!!!" + tempBlock.shape);
+                break;
+            }
+            i++;
+        }
+        if (waitingBlocks[j] == -1) {
+            waitingBlocks[j] = new Block;
+            console.log( "[" + j + "]  Hard Block!!!!!!!!!")
+        }
+    }
     
 }
 
@@ -750,16 +783,40 @@ function detectBoardLocationWithMouse() {
     return ij;
 }
 
-//to DO: CHANGE CODE B/C THERE ARENT ALWAYS 3 WAITING BLOCKS
-//TO DO: FIGURE OUT WHERE TO CALL THIS FUNCTION
-// CHECK IF THIS FUNCTION WORKS PROPERLY
+
 // THEN IMPLEMNT THE ALGORITHM TO EASE THE GAME AND STRAIN IT FROM ENDING. 
 function calculateGameOver() {
-    if (checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[0])) == false
-        && checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[1])) == false
-        && checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[2])) == false) {
-        image(gameOver, 75, 270);
+    let isItOver0 = true;
+    let isItOver1 = true;
+    let isItOver2 = true;
+
+    if (waitingBlocks[0] != -1) {
+        if (checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[0].shape)) == false) {
+            isItOver0 = true;
+        } else {
+            isItOver0 = false;
         }
+    }
+     
+    if (waitingBlocks[1] != -1) {
+        if (checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[1].shape)) == false) {
+            isItOver1 = true;
+        } else {
+            isItOver1 = false;
+        }
+    }
+
+
+    if (waitingBlocks[2] != -1) {
+        if (checkSpaceAvailability(convertEssentialComparisonShape(waitingBlocks[2].shape)) == false) {
+            isItOver2 = true;
+        } else {
+            isItOver2 = false;
+        }
+    }
+
+    isItOver = isItOver0 && isItOver1 && isItOver2;
+    
 }
 
 function calculateLineEquation(x1, y1, x2, y2) {
