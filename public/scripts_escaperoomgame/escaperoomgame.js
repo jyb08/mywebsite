@@ -191,6 +191,7 @@ function draw() {
         drawLastRoom();
     }
         
+    //iteration
     while (frameCountInitial != 0) {
         transparency = 0;
         if (frameCount <= frameCountInitial + 5) {
@@ -206,7 +207,6 @@ function draw() {
         frameCountInitial = 0;
         frameCountFinal = 0;
     }
-
 }
 
 
@@ -301,6 +301,7 @@ function detectAreaWithCoordinates(x1, y1, x2, y2, x3, y3, x4, y4, a, b) {
     
     condition1 = (b > (line1_slope * a + line1_intercept)) ? true : false;
 
+    
     if (line2_slope > 0) {
         condition2 = (b > (line2_slope * a + line2_intercept)) ? true : false;
     } else {
@@ -688,6 +689,7 @@ function drawFinalResultScene() {
     image(scissors, 230, 640, 120, 120);
     image(rules, 690, 445, 500, 350);
     
+    //selection and sequencing
     if (passwordScene3StateForPlayer == 'scissors') {
         image(scissors_selected, 230, 640, 120, 120);
     }

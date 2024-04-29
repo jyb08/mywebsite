@@ -2,7 +2,9 @@ let imageBackground;
 let imageColorBlocks = [];
 let imageWaitingBlocks = [];
 
+//stores the three waiting blocks on the deck
 let waitingBlocks = [-1, -1, -1];
+// stores the board (each number indicates a color and -1 indicates that the space is empty)
 let board = [
     [-1, -1, -1, -1, -1, -1, -1, -1],
     [-1, -1, -1, -1, -1, -1, -1, -1],
@@ -37,7 +39,7 @@ class Block {
             [-1, -1, -1],
         ];
 
-        this.shapes = [
+        this.shapes = [ //all shapes that could be placed on the board
             [ [-1, -1, -1], [-1, 9, -1], [9, -1, -1] ], // 0 //shapes[0]
             [ [-1, -1, -1], [-1, 9, -1], [-1, 9, -1] ], // 1
             [ [-1, 9, -1], [9, 9, -1], [-1, -1, -1] ],  // 2
@@ -196,6 +198,7 @@ function setup() {
     frameRate(12);
     createCanvas(500, 800);
 
+    //setting all the waitingBlocks 
     waitingBlocks[0] = block00;
     waitingBlocks[1] = block01;
     waitingBlocks[2] = block02;
@@ -233,7 +236,7 @@ function doubleClicked() {
 }
 
 function mouseClicked() {
-    
+    //if the game is over, the page is reloaded after a click
     if (isItOver) {
         window.location.reload();
         return;
@@ -251,9 +254,7 @@ function mouseClicked() {
                     if (tempBlock.shape[1 + b][1 + a] != -1) {
                         board[ij[1] + b][ij[0] + a] = tempBlock.shape[1 + b][1 + a];
                     } 
-                    // else {
-                    //     board[ij[1] + b][ij[0] + a] = -1;
-                    // }
+
                 }
             }
 
@@ -269,6 +270,7 @@ function mouseClicked() {
         }
     }
 
+    //senses which block is selected from the deck
     if (detectAreaWithCoordinates(29, 596, 157, 597, 158, 726, 27, 725, mouseX, mouseY)) {
         locationBlocksSelected = 0;
     } else if (detectAreaWithCoordinates(184, 596, 314, 597, 315, 726, 186, 725, mouseX, mouseY)) {
@@ -279,37 +281,19 @@ function mouseClicked() {
         locationBlocksSelected = -1;
     }
 
-
-    // let testShape = [ 
-    //     [9, 9, 9], 
-    //     [-1, -1, 9], 
-    //     [-1, -1, -1] 
-    // ];
     
     calculateGameOver();
 
-    // console.log("DEBUG - testShape: ");
-    // console.log(testShape);
-    // let resultingShape = convertEssentialComparisonShape(testShape);
-    
-    // console.log("DEBUG - resultingShape: ");
-    // console.log(resultingShape);
-    
-    //console.log("DEBUG - CHECKING AVAIL: ");
 
-    
-    //console.log(slicedShape);
-    //let result = checkSpaceAvailability(slicedShape);
-    //c/onsole.log(result);
-    //checkSpaceAvailability(slicedShape);
-
-    //console.log("X: " + mouseX + " Y: " + mouseY);
-    
     
 }
+// algorithm that controls the difficulty of the game. 
+// to make it easy, a block that can 100% be placed on the board will sometimes be given
+// the number of times an easy block is given can be controlled by "i" in the while loop 
+// to make it hard, a block that can't be placed on the baord will sometimes be given
 
 function refillNew3Blocks() {
-
+    
     for (let j = 0; j < 3; j++) {
         let i = 0;
         while (i < 10) {
@@ -329,12 +313,10 @@ function refillNew3Blocks() {
     
 }
 
-function mouseDragged() {
 
-}
 
 /*  ==== ==== ==== ==== Visualization ==== ==== ==== ==== */
-
+// draws squares (of the respectful color) on the board 
 function drawBoard() {
     image(imageBoard, 50, 150);
     for (let i = 0; i < 8; i++) {
@@ -363,7 +345,8 @@ function drawBoard() {
     }
 
 }
- 
+
+//draws the blocks 
 function drawBlocks(block) {
     for (let i = 0; i <= 2; i++) {
         for (let j = 0; j <= 2; j++) {
@@ -392,6 +375,7 @@ function drawBlocks(block) {
     }
 }
 
+// shows which block from the deck is selected
 function drawSelectedBlocks() {
     if (locationBlocksSelected == -1) {
         image(imageNonSelectedBlock, 29, 597);
@@ -404,6 +388,7 @@ function drawSelectedBlocks() {
     } 
 }
 
+// draws the block on the selection bar (aka deck)
 function drawBlocksOnSelectionBar() {
 
     for (let i = 0; i <= 2; i++) {
@@ -485,8 +470,8 @@ function drawBlocksOnSelectionBar() {
 
 }
 
+
 function drawCrownAndScore() {
-    // let size = 100 + 500*sin(frameCount/10)
     image(imageCrown, 7, 0);
 
     textSize(45);
@@ -498,6 +483,7 @@ function drawCrownAndScore() {
 
     
 }
+
 
 function isBlockPositionEmpty(tempBlock) {
     let allEmpty = true;
@@ -554,21 +540,6 @@ function drawHoveringBlockProjection() {
 
 
 
-// let board = [
-//     [-1,  1, -1,  0,  0, -1, -1,  3],
-//     [-1,  1, -1,  3,  1, -1, -1,  4],
-//     [-1, -1,  2,  0,  6, -1, -1, -1],
-//     [-1, -1, -1,  4,  0, -1, -1, -1],
-//     [-1, -1, -1,  0,  6, -1, -1, -1],
-//     [-1, -1, -1,  2,  0,  5, -1,  2],
-//     [-1, -1, -1,  0,  3, -1,  6,  3],
-//     [ 0,  4,  2,  6,  4,  1,  4,  5],
-// ] // EXAMPLE BOARD, DELETE AFTER COMPLETING THE FUNCTION!!!!!!!!!!!!!!!!!!!!!
-
-/**
- 
-window를 슬라이스드쉐이프에 다이멘션에 맞춰서 자르고, 잘린 보드 window를 모양이랑 비교. 
- */
 function checkSpaceAvailability(slicedShape) {
 
     let result = false;
@@ -593,9 +564,7 @@ function checkSpaceAvailability(slicedShape) {
             for (let a = 0; a < yLength; a++) {
                 for (let b = 0; b < xLength; b++) {
                     if (slicedShape[a][b] != -1 && board[y + a][x + b] == -1) {
-                        //console.log("TRUE " + a + ',' + b);
-                            // HERE  TODO: dimension의 크기의 맞는 
-                            // number of times all true여야지면 TRUE이도록 edit 하시오.
+
                         i++;
                     }
                 }
@@ -616,8 +585,7 @@ function checkSpaceAvailability(slicedShape) {
  * Vertical variables will contain the y coordinate
  */
 function convertEssentialComparisonShape(originalShape) { 
-
-
+    
     let verticalTop = -1;
     let verticalBottom = -1;
     let horizontalLeft = -1;
@@ -638,7 +606,6 @@ function convertEssentialComparisonShape(originalShape) {
             }
         }
     }
-
 
     for (let x = 2; x >= 0; x--) {
         for (let y = 2; y >= 0; y--) {
@@ -669,7 +636,6 @@ function convertEssentialComparisonShape(originalShape) {
     }
     
     let resultingShape = resultingShapeVSliced;
-
     return resultingShape;
 }
 
